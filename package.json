@@ -1,0 +1,14 @@
+{
+  "name": "lolbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-cognitiveservices-imagesearch": "^2.0.0",
+    "ms-rest-azure": "^2.6.0",
+    "twit": "^2.2.11"
+  }
+}
