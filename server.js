@@ -71,7 +71,7 @@ function responseHandler (response) {
         }
         const imgArray = imageResults.value;
         const img = imgArray[Math.floor(Math.random() * imgArray.length)];
-        const url = img.thumbnailUrl.replace(/https/, 'http');
+        const url = img.thumbnailUrl;
         console.log(`${getDateTime()} found image: ${url}.jpg`);
         const data = await getImg(`${url}.jpg`);
         await postImg(data);
@@ -88,7 +88,7 @@ function bingImgSearch (term) {
     const params = {
         method: 'GET',
         hostname: host,
-        path : searchPath + '?q=' + encodeURIComponent(term),
+        path: `${searchPath}?q=${encodeURIComponent(term)}`,
         headers: { 'Ocp-Apim-Subscription-Key': config.bing_config.subscriptionKey }
     };
     const req = https.request(params, responseHandler);
