@@ -57,8 +57,6 @@ function getImg (url) {
     })
 }
 
-
-
 function responseHandler (response) {
     let body = '';
 
@@ -97,6 +95,5 @@ function bingImgSearch (term) {
     const req = https.request(params, responseHandler);
     req.end();
 }
-
 
 bingImgSearch(searchTerm);
