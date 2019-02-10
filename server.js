@@ -35,7 +35,7 @@ function postStatus (obj) {
     });
 }
 
-function postImg (data) {
+async function postImg (data) {
     return twitter.post('media/upload', { media_data: data }, (error, data, response) => {
         return postStatus({
             status: '#LOL #LOLSurprise',
@@ -44,7 +44,7 @@ function postImg (data) {
     });
 }
 
-function getImg (url) {
+async function getImg (url) {
     return new Promise((resolve, reject) => {
         request.get(url, (error, response, body) => {
             if (!error && response.statusCode === 200) {
@@ -64,7 +64,7 @@ function responseHandler (response) {
         body += data;
     });
 
-    response.on('end', () => {
+    response.on('end', async () => {
         const imageResults = JSON.parse(body);
         if (!imageResults.value.length) {
             throw 'error: no images found!';
@@ -73,13 +73,12 @@ function responseHandler (response) {
         const img = imgArray[Math.floor(Math.random() * imgArray.length)];
         const url = img.thumbnailUrl.replace(/https/, 'http');
         console.log(`${getDateTime()} found image: ${url}.jpg`);
-        return getImg(url + '.jpg').then(data => {
-            return postImg(data);
-        });
+        const data = await getImg(`${url}.jpg`);
+        await postImg(data);
     });
 
     response.on('error', error => {
-        console.error('error: ' + error.message);
+        console.error(`error: ${error.message}`);
     });
 
 };
@@ -87,10 +86,10 @@ function responseHandler (response) {
 function bingImgSearch (term) {
     console.log(`${getDateTime()} search term: ${term}`);
     const params = {
-        method : 'GET',
-        hostname : host,
+        method: 'GET',
+        hostname: host,
         path : searchPath + '?q=' + encodeURIComponent(term),
-        headers : { 'Ocp-Apim-Subscription-Key' : config.bing_config.subscriptionKey }
+        headers: { 'Ocp-Apim-Subscription-Key': config.bing_config.subscriptionKey }
     };
     const req = https.request(params, responseHandler);
     req.end();
