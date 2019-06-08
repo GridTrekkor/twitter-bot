@@ -7,16 +7,16 @@ const twitter = new Twit(config.twitter_config);
 const host = 'api.cognitive.microsoft.com';
 const searchPath = '/bing/v7.0/images/search';
 const searchTerms = [
-    'lol doll', 
-    'lol surprise', 
-    'lol fashion crush', 
-    'lol bigger surprise', 
-    'lol biggie pet', 
-    'lol doll house', 
-    'lol bling series',
-    'lol confetti',
-    'lol doll cake',
-    'lol wave 2'
+    'LOL Doll', 
+    'LOL Surprise', 
+    'LOL Fashion Crush', 
+    'LOL Bigger Surprise', 
+    'LOL Biggie Pet', 
+    'LOL Doll House', 
+    'LOL Bling Series',
+    'LOL Confetti',
+    'LOL Doll Cake',
+    'LOL Wave 2'
 ];
 
 const searchTerm = searchTerms[Math.floor(Math.random() * searchTerms.length)];
@@ -35,16 +35,16 @@ function postStatus (obj) {
     });
 }
 
-async function postImg (data) {
+function postImg (data) {
     return twitter.post('media/upload', { media_data: data }, (error, data, response) => {
         return postStatus({
-            status: '#LOL #LOLSurprise',
-            media_ids: [data.media_id_string] 
+            status: `#LOL #LOLSurprise #${searchTerm.replace(/ /g, '')}`,
+            media_ids: [data.media_id_string]
         });
     });
 }
 
-async function getImg (url) {
+function getImg (url) {
     return new Promise((resolve, reject) => {
         request.get(url, (error, response, body) => {
             if (!error && response.statusCode === 200) {
@@ -74,7 +74,7 @@ function responseHandler (response) {
         const url = img.thumbnailUrl;
         console.log(`${getDateTime()} found image: ${url}.jpg`);
         const data = await getImg(`${url}.jpg`);
-        await postImg(data);
+        postImg(data);
     });
 
     response.on('error', error => {
